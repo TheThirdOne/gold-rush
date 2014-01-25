@@ -13,7 +13,7 @@
       "tcp-listen"]}],
   "app": {
     "background": {
-      "scripts": ["main.js"]
+      "scripts": ["src/main.js"]
     }
   }
 }
