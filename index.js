@@ -7,7 +7,8 @@ if (http.Server) {
   isServer = true;
 
   server.addEventListener('request', function(req) {
-    var url = req.headers.url;
+    var url = req.params.base;
+    console.log(req)
     if (url == '/')
       url = '/index.html';
     // Serve the pages of this chrome application.
