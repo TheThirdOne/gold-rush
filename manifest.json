@@ -7,6 +7,10 @@
     "16": "icon_16.png",
     "128": "icon_128.png"
   },
+  "permissions": [
+    {"socket": [
+      "tcp-connect",
+      "tcp-listen"]}],
   "app": {
     "background": {
       "scripts": ["main.js"]
