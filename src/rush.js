@@ -51,7 +51,7 @@ Rush.prototype = {
         return function(str){
           var temp = str.split('/'),out=[];
           for(var i = 0;i < t.length;i++){
-            out[i]=[t[i],temp[tmp[i]]];
+            out[i]=[t[i].slice(1,t[i].length),temp[tmp[i]]];
           }
           return out;
         }
@@ -95,7 +95,7 @@ Rush.prototype = {
       return this.onrequestend(req)
     if(this.routerUsed && this.routes[ind].path === 'methods'){
       this.runMethods(req,this.nextgen(ind));
-    }else if(this.matchPath(this.routes[ind].path,req.params.base)){
+    }else if(this.matchPath(this.routes[ind].path,req.baseURL)){
       this.routes[ind].callback(req,this.nextgen(ind));
     }
   },
@@ -109,12 +109,12 @@ Rush.prototype = {
   },
   runMethods: function(req){
     for(var i = 0; i < this.requests.length;i++){
-      var temp = this.matchPath(this.requests[i].path,req.params.base);
+      var temp = this.matchPath(this.requests[i].path,req.baseURL);
       if(req.headers.method===this.requests[i].type&&temp){
         if(this.requests[i].prelim){
-          var additional = this.requests[i].prelim(req.params.base);
+          var additional = this.requests[i].prelim(req.baseURL);
           for(var k = 0; k < additional.length;k++){
-            req.params.params[additional[k][0]]=additional[k][1];
+            req.params[additional[k][0]]=additional[k][1];
           }
           console.log(req);
         }

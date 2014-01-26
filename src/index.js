@@ -7,15 +7,15 @@ if (http.Server) {
     console.log(req);
     next(req);
   });
-  app.useRouter();
+  //app.useRouter();
   app.use(function(req,next){
-    var url = req.params.base;
+    var url = req.baseURL;
     if (url == '/')
       url = '/index.html';
     req.serveUrl(url,function(){next(req)});
   });
   app.get('/:bilbo/:swaggins',function(req,next){
-    req.writeText(req.params.params[':bilbo'] + ' ' + req.params.params[':swaggins']);
+    req.writeText(req.params.bilbo + ' ' + req.params.swaggins);
     next(req);
   });
 }

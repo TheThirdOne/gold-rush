@@ -238,6 +238,7 @@ var http = function() {
     this.readyState = 1;
     this.raw = raw;
     this.params = parseUrl(this.headers.url)
+    this.baseURL = decodeURI(this.headers.url.split('?')[0])
   }
   
   function parseUrl(str){
@@ -251,7 +252,7 @@ var http = function() {
           params[decodeURI(tmp[0])]=decodeURI(tmp[1]);
       }
     }
-    return {base:temp[0],params:params}
+    return params;
   }
   HttpRequest.prototype = {
     __proto__: EventSource.prototype,
