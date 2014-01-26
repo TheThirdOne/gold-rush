@@ -349,10 +349,12 @@ var http = function() {
      *     retrieved via an XmlHttpRequest and served as the response to the
      *     request.
      */
-    serveUrl: function(url) {
+    serveUrl: function(url,callback) {
       var t = this;
       var xhr = new XMLHttpRequest();
       xhr.onloadend = function() {
+        if(xhr.status!==200)
+          callback();
         var type = 'text/plain';
         if (this.getResponseHeader('Content-Type')) {
           type = this.getResponseHeader('Content-Type');

@@ -82,13 +82,24 @@ Rush.prototype = {
     this.method('OPTIONS',path,callback);
   },
   onrequest: function(req){
-    for(var i = 0; i < this.routes.length; i++){
-      if(this.routerUsed && this.routes[i].path === 'methods'){
-        this.runMethods(req);
-      }else if(this.matchPath(this.routes[i].path,req.params.base)){
-        this.routes[i].callback(req);
-      }
+    this.route(req,0);
+  },
+  nextgen: function(ind){
+    var t = this;
+    return function(req){
+        t.route(req,ind+1);
     }
+  },
+  route: function(req, ind){
+    if(ind >= this.routes.length)
+      return this.onrequestend(req)
+    if(this.routerUsed && this.routes[ind].path === 'methods'){
+      this.runMethods(req,this.nextgen(ind));
+    }else if(this.matchPath(this.routes[ind].path,req.params.base)){
+      this.routes[ind].callback(req,this.nextgen(ind));
+    }
+  },
+  onrequestend:function(req){
     if(!this.routerUsed)
       this.runMethods(req);
   },

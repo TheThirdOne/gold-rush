@@ -3,26 +3,19 @@ var isServer = false;
 if (http.Server) {
   var app = new Rush();
   app.listen(port);
-  app.use(function(req){
+  app.use(function(req,next){
     console.log(req);
+    next(req);
   });
   app.useRouter();
-  app.use(function(req){
+  app.use(function(req,next){
     var url = req.params.base;
     if (url == '/')
       url = '/index.html';
-    req.serveUrl(url);
+    req.serveUrl(url,function(){next(req)});
   });
-  app.use(function(req){
-    var url = req.params.base;
-    if (url == '/')
-      url = '/index.html';
-    req.serveUrl(url);
-  });
-  /*app.get('/yolo/swaggins',function(req){
-    req.writeText('hello there');
-  });*/
-  app.get('/:bilbo/:swaggins',function(req){
-    req.writeText('hello there');
+  app.get('/:bilbo/:swaggins',function(req,next){
+    req.writeText(req.params.params[':bilbo'] + ' ' + req.params.params[':swaggins']);
+    next(req);
   });
 }
