@@ -332,7 +332,17 @@ var http = function() {
       this.finished_ = true;
       this.checkFinished_();
     },
-  
+    
+    /**
+     * 
+     * 
+     */
+     writeText: function(str, type){
+        this.writeHead(this.status, {
+          'Content-Type': type || 'text/plain',
+          'Content-Length': str.length});
+        this.write(str);
+     },
     /**
      * Automatically serve the given |url| request.
      * @param {string} url The URL to fetch the file to be served from. This is

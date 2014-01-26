@@ -24,6 +24,10 @@ Rush.prototype = {
       path = '^'+path.replace('*','.*');
     this.routes.push({path: path, callback: callback});
   },
+  useRouter: function(){
+    this.routerUsed = true;
+    this.routes.push({path: 'methods'});
+  },
   method: function(type,path,callback){
     if(!callback){
       callback = path;
@@ -55,16 +59,25 @@ Rush.prototype = {
   },
   onrequest: function(req){
     for(var i = 0; i < this.routes.length; i++){
-      if(this.routes[i].path === 'methods')
-        runMethods(req);
-      else if(this.matchPath(this.routes[i].path,req.params.base)){
+      if(this.routerUsed && this.routes[i].path === 'methods'){
+        this.runMethods(req);
+      }else if(this.matchPath(this.routes[i].path,req.params.base)){
         this.routes[i].callback(req);
       }
     }
+    if(!this.routerUsed)
+      this.runMethods(req);
   },
   matchPath: function(regex,str){
-    return str === str.match(regex)[0];
+    var tmp = str.match(regex);
+    return str === (tmp||[])[0];
   },
   runMethods: function(req){
+    for(var i = 0; i < this.requests.length;i++){
+      var temp = this.matchPath(this.requests[i].path,req.params.base);
+      if(req.headers.method===this.requests[i].type&&temp){
+        this.requests[i].callback(req);
+      }
+    }
   }
 };
