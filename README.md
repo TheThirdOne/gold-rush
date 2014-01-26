@@ -14,5 +14,7 @@ In short, [Socket Api](http://developer.chrome.com/apps/socket.html).
 
 How to Install / Use:
 ---------------------
-For just playing around, installing a [basic app](https://chrome.google.com/webstore/detail/bbigdiocphkimgppcokfafamfggecpmj/) and debugging can be helpful to learn the framework.   
-For a longer lasting test environment, make a simple chrome app and load http.js and rush.js before the main app runs.
+For just playing around, installing a [basic app](https://chrome.google.com/webstore/detail/bbigdiocphkimgppcokfafamfggecpmj/) and debugging can be helpful to learn the framework.  
+In order to debug/play aroung with the app, you need to start it(it will be blank), go to ```chrome://inspect/#apps```, and inspect Gold Rush. There will be two, you need to click the one that does not have background in its url. Then you should have a debug window that has access to the api.
+
+For a longer term solution, clone this repo, go into ```chrome://extensions```, enable developer mode, and click load unpacked extension. Once it is installed that way, you can edit ```src/index.js``` or open a debug window to do live coding.
