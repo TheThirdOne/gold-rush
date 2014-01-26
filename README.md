@@ -1,9 +1,8 @@
-LocalRush
+Gold Rush
 ==========
-
-Why?
+What?
 ----
-Developers don't always have access to backend servers to test on. What do web developers always have access to though? Chrome. By making a testing backend for Chrome, this takes away the limitation of being at a dedicated development machine. With access to your code and Chrome, this library gives you the ability to prototype on any computer or os (Including ChromeOS).
+Gold Rush is a web framework for a backend server running on chrome apps. This means that anywhere Chrome(desktop) can run, Gold Rush can run too. Getting node installed simple to test a few backend snippets doesn't make sense. Instead, making a small chrome app server is much easier and faster. Though, before this framework, there were no easy ways to make a chrome app server; the only way to make a server was through raw sockets. With this framework, a new adaptable server can be up in minutes. 
 
 Influences
 ----------
@@ -12,3 +11,8 @@ Sinatra, Express and Martini are the models this framework tries to emulate. The
 How?
 ----
 In short, [Socket Api](http://developer.chrome.com/apps/socket.html).
+
+How to Install / Use:
+---------------------
+For just playing around, installing a [basic app](https://chrome.google.com/webstore/detail/bbigdiocphkimgppcokfafamfggecpmj/) and debugging can be helpful to learn the framework.   
+For a longer lasting test environment, make a simple chrome app and load http.js and rush.js before the main app runs.
