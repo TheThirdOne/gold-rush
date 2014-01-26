@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 The Chromium Authors. All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
+ * found a thttps://github.com/GoogleChrome/chrome-app-samples/blob/master/LICENSE.
  **/
 
 var http = function() {
@@ -350,7 +350,7 @@ var http = function() {
      *     retrieved via an XmlHttpRequest and served as the response to the
      *     request.
      */
-    serveUrl: function(url,callback) {
+    serveURL: function(url,callback) {
       var t = this;
       var xhr = new XMLHttpRequest();
       xhr.onloadend = function() {

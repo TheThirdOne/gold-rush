@@ -12,7 +12,7 @@ if (http.Server) {
     var url = req.baseURL;
     if (url == '/')
       url = '/index.html';
-    req.serveUrl(url,function(){next(req)});
+    req.serveURL(url,function(){next(req)});
   });
   app.get('/:bilbo/:swaggins',function(req,next){
     req.writeText(req.params.bilbo + ' ' + req.params.swaggins);
