@@ -205,6 +205,10 @@ var http = function() {
       else if (keepAlive)
         this.readRequestFromSocket_(request.socketId_);
     },
+    
+    destroy: function(){
+      socket.destroy(this.socketInfo_.socketId);
+    },
   };
   
   // MIME types for common extensions.

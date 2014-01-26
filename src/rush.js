@@ -3,6 +3,9 @@
  * @contructor
  */
 function Rush(){
+  this.routes = [];
+  this.requests = [];
+  this.routerUsed = false;
   this.server = new http.Server();
   this.server.addEventListener('request', function(req) {
     this.onrequest(req);
@@ -10,9 +13,6 @@ function Rush(){
   }.bind(this));
 }
 Rush.prototype = {
-  routes: [],
-  requests: [],
-  routerUsed: false,
   /**
    * Starts the server listening on a port
    * @param {Number} port 
@@ -26,6 +26,7 @@ Rush.prototype = {
    * @param {Function} callback called upon new request
    */
   use: function(path,callback){
+    console.log('use')
     if(!callback){
       callback = path;
       path = '*';
@@ -38,6 +39,7 @@ Rush.prototype = {
    * Sets where in the stack the main router is.
    */
   useRouter: function(){
+    console.log('rout')
     this.routerUsed = true;
     this.routes.push({path: 'methods'});
   },
@@ -189,7 +191,7 @@ Rush.prototype = {
    * Runs the method specific requests against the request
    * @param {HTTPRequest} req
    */
-  runMethods: function(req){
+  runMethods: function(req,next){
     for(var i = 0; i < this.requests.length;i++){
       var temp = this.matchPath(this.requests[i].path,req.baseURL);
       if(req.headers.method===this.requests[i].type&&temp){
@@ -198,10 +200,12 @@ Rush.prototype = {
           for(var k = 0; k < additional.length;k++){
             req.params[additional[k][0]]=additional[k][1];
           }
-          console.log(req);
         }
-        this.requests[i].callback(req);
+        if(this.requests[i].callback(req)){
+          return;
+        }
       }
     }
+    if(next)next(req);
   }
 };
