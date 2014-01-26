@@ -49,15 +49,13 @@ Rush.prototype = {
       path = path.replace(/:[^\/]+/g,'[^\/]+')
       var prelim = function(t,tmp){
         return function(str){
-          var temp = str.split('/'),out={};
+          var temp = str.split('/'),out=[];
           for(var i = 0;i < t.length;i++){
-            out[t[i]]=temp[tmp[i]];
+            out[i]=[t[i],temp[tmp[i]]];
           }
-          console.log(temp,t,tmp);
           return out;
         }
       }(t,tmp);
-      console.log(path,prelim('/hello/there'));
     }
     path = '^'+path.replace('*','.*');
     this.requests.push({type:type || 'GET',prelim: prelim,path:path,callback:callback});
@@ -102,6 +100,13 @@ Rush.prototype = {
     for(var i = 0; i < this.requests.length;i++){
       var temp = this.matchPath(this.requests[i].path,req.params.base);
       if(req.headers.method===this.requests[i].type&&temp){
+        if(this.requests[i].prelim){
+          var additional = this.requests[i].prelim(req.params.base);
+          for(var k = 0; k < additional.length;k++){
+            req.params.params[additional[k][0]]=additional[k][1];
+          }
+          console.log(req);
+        }
         this.requests[i].callback(req);
       }
     }

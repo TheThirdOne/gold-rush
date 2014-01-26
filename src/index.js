@@ -19,9 +19,9 @@ if (http.Server) {
       url = '/index.html';
     req.serveUrl(url);
   });
-  app.get('/yolo/swaggins',function(req){
+  /*app.get('/yolo/swaggins',function(req){
     req.writeText('hello there');
-  });
+  });*/
   app.get('/:bilbo/:swaggins',function(req){
     req.writeText('hello there');
   });
