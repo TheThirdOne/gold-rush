@@ -15,6 +15,39 @@ In short, [Socket Api](http://developer.chrome.com/apps/socket.html).
 How to Install / Use:
 ---------------------
 For just playing around, installing a [basic app](https://chrome.google.com/webstore/detail/bbigdiocphkimgppcokfafamfggecpmj/) and debugging can be helpful to learn the framework.  
-In order to debug/play aroung with the app, you need to start it(it will be blank), go to ```chrome://inspect/#apps```, and inspect Gold Rush. There will be two, you need to click the one that does not have background in its url. Then you should have a debug window that has access to the api.
+In order to debug/play aroung with the app, go to ```chrome://inspect/#apps```, and inspect Gold Rush. Then you should have a debug window that has access to the api.
 
-For a longer term solution, clone this repo, go into ```chrome://extensions```, enable developer mode, and click load unpacked extension. Once it is installed that way, you can edit ```src/index.js``` or open a debug window to do live coding.
+For a longer term solution, clone this repo, go into ```chrome://extensions```, enable developer mode, and click load unpacked extension. Once it is installed that way, you can edit ```src/main.js``` or open a debug window to do live coding.
+
+Inorder to use in your existing project, simply add ```src/http.js``` and ```src/rush.js``` to your manifest as background scripts, and add the permissions.   
+For example, if your ```manifest.json``` looked like   
+
+    {
+      ...
+      "permissions": ["serial"],
+      "app": {
+        "background": {
+          "scripts": ["main.js"]
+        }
+      } 
+      ...
+    }
+
+It would become:
+
+    {   
+      ...   
+      "permissions": [
+        "serial",
+        {"socket": [
+          "tcp-connect", 
+          "tcp-listen"]}], 
+      "app": {
+        "background": {
+          "scripts": ["src/http.js","src/rush.js","main.js"]
+        }
+      } 
+      ...
+    }
+
+Now you can use the framework freely in your app.
