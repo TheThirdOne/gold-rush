@@ -22,16 +22,19 @@ function start(callback){
       req.serveURL(url,function(){next(req)});
     });
     //catches any url that has 2 parts excluding params
-    app.get('/:first/:second',function(req){
+    app.get('/:first/:second',function(req,next){
       req.writeText(req.params.second + ' vs. ' + req.params.first);
+      next(req);
     });
     //catches any url that starts with /hello/
-    app.get('/hello/*',function(req){
+    app.get('/hello/*',function(req,next){
       req.writeText('hello world');
+      next(req);
     });
     //matchs any single peice
-    app.get('/:hello',function(req){
+    app.get('/:hello',function(req,next){
       req.writeText(req.params.hello);
+      next(req);
     });
   }
 }

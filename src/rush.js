@@ -153,7 +153,7 @@ Rush.prototype = {
     var t = this;
     return function(req){
         t.route(req,ind+1);
-    }
+    };
   },
   /**
    * Main routing function
@@ -162,13 +162,13 @@ Rush.prototype = {
    */
   route: function(req, ind){
     if(ind >= this.routes.length)
-      return this.onrequestend(req)
+      return this.onrequestend(req);
     if(this.routerUsed && this.routes[ind].path === 'methods'){
-      this.runMethods(req,this.nextgen(ind));
+      this.onMethodStart(req,this.nextgen(ind));
     }else if(this.matchPath(this.routes[ind].path,req.baseURL)){
       this.routes[ind].callback(req,this.nextgen(ind));
     }else{
-      this.route(req,ind++);
+      this.route(req,ind+1);
     }
   },
   /**
@@ -177,7 +177,7 @@ Rush.prototype = {
    */
   onrequestend:function(req){
     if(!this.routerUsed)
-      this.runMethods(req);
+      this.onMethodStart(req);
   },
   /**
    * Test if regex matches a path
@@ -187,25 +187,35 @@ Rush.prototype = {
   matchPath: function(regex,str){
     return str === (str.match(regex)||[])[0];
   },
-  /**
-   * Runs the method specific requests against the request
-   * @param {HTTPRequest} req
-   */
-  runMethods: function(req,next){
-    for(var i = 0; i < this.requests.length;i++){
-      var temp = this.matchPath(this.requests[i].path,req.baseURL);
-      if(req.headers.method===this.requests[i].type&&temp){
-        if(this.requests[i].prelim){
-          var additional = this.requests[i].prelim(req.baseURL);
-          for(var k = 0; k < additional.length;k++){
-            req.params[additional[k][0]]=additional[k][1];
-          }
-        }
-        if(this.requests[i].callback(req)){
-          return;
+  onMethodStart: function(req, ind){
+    this.temp = ind;
+    this.runMethod(req,0);
+  },
+  onMethodEnd: function(req){
+    var ind = this.ind;
+    this.ind = undefined;
+    if(ind!==undefined)
+      this.route(req,ind+1);
+  },
+  nextMethod: function(ind){
+    var t = this;
+    return function(req){
+        t.runMethod(req,ind+1);
+    };
+  },
+  runMethod: function(req, ind){
+    if(ind >= this.requests.length)
+      return this.onMethodEnd(req);
+    if(req.headers.method===this.requests[ind].type&&this.matchPath(this.requests[ind].path,req.baseURL)){
+      if(this.requests[ind].prelim){
+        var additional = this.requests[ind].prelim(req.baseURL);
+        for(var k = 0; k < additional.length;k++){
+          req.params[additional[k][0]]=additional[k][1];
         }
       }
+      this.requests[ind].callback(req,this.nextMethod(ind));
+    }else{
+      this.runMethod(req,ind+1);
     }
-    if(next)next(req);
-  }
+  },
 };
